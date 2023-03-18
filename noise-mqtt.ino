@@ -210,30 +210,25 @@ void mic_i2s_reader_task(void* parameter) {
 void reconnect() {
   
   // Loop para reconección
-  if (!client.connected()) {
-    Serial.println("Conectando al broker MQTT...");
-    if (client.connect("ProducerJennifer", user, pass)) {
-      Serial.println("Conectado al broker MQTT!");
-      client.publish("noise", "Te esta saludando Jennifer");
-      // Aquí puedes suscribirte a los temas que quieras
-    } else {
-      Serial.print("Fallo en la conexión al broker MQTT. Código de error: ");
-      Serial.println(client.state());
-      delay(5000);
-      return;
-    }
+
+  Serial.println("Conectando al broker MQTT...");
+  if (client.connect("ProducerJennifer", user, pass)) {
+    Serial.println("Conectado al broker MQTT!");
+    client.publish("noise", "Te esta saludando Jennifer");
+    // Aquí puedes suscribirte a los temas que quieras
+  } else {
+    Serial.print("Fallo en la conexión al broker MQTT. Código de error: ");
+    Serial.println(client.state());
+    delay(5000);
+    return;
   }
+  
 }
 void setup() {
   setCpuFrequencyMhz(80);
   Serial.begin(115200);
   delay(5000);
-   //****************
-  if (!SPIFFS.begin(true)) {
-    Serial.println("Se ha producido un error al montar SPIFFS");
-    return;
-  }
-  
+ 
   // Conexión WiFi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
